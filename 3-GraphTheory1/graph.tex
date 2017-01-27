@@ -1,0 +1,62 @@
+\documentclass[12 pt, twoside] {article}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{textcomp}
+\usepackage{setspace}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{footnote}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+
+\makesavenoteenv{tabular}
+\makesavenoteenv{table}
+
+\setlist[itemize]{noitemsep, topsep=0pt}
+
+\newcommand\la{\textlangle}
+\newcommand\ra{\textrangle}
+
+\setlength{\parindent}{0pt}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0,0,0.6}
+\definecolor{backcolor}{rgb}{0.95,0.95,0.95}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor = \color{backcolor},
+	commentstyle = \color{codeblue},
+	keywordstyle = \color{codegreen},
+	numberstyle = \color{codegray},
+	stringstyle = \color{magenta},
+	basicstyle = \footnotesize\ttfamily,
+	breakatwhitespace = false,
+	breaklines = true,
+	captionpos = b,
+	keepspaces = true,
+	numbers = left,
+	numbersep = 5pt,
+	showspaces = false,
+	showstringspaces = false,
+	showtabs = false,
+	tabsize = 4
+}
+
+\lstset{style = mystyle}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Yicheng Wang}
+\lhead{Graph Theory 1}
+
+\begin{document}
+{\catcode`?=\active
+\def?!#1!{\footnote{#1}}
+\section*{Graph Theory 1}
+\subsection*{Representation of a Graph}
+\end{document}
+
+

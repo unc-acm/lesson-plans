@@ -181,3 +181,5 @@ TSWLatexianTemp*
 
 .*~
 .*.un~
+
+*.class
