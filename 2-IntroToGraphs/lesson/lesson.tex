@@ -174,9 +174,11 @@ with breath first search we are guaranteed to reach B in one step.
 
 In breath first search, if the average degree of the graph is $p$ and the true
 distance between the starting and ending positions is $d$, then $O(p^d)$ nodes
-will be traversed, whereas DFS is much more erratic and ``luck based.'' In
-short, unless traversal of the whole graph is necessary, almost always prefer
-BFS to DFS. (But since DFS is easier to implement, it's better to know both!)
+will be traversed, whereas DFS is much more erratic and ``luck based.'' However,
+the choice of which to use is highly context dependent. While BFS offers the
+potential for higher speed, it uses up a lot of memory, making it potentially
+unfeasible. It may also be the case that there are many desirable results and
+they are all far in the graph, in which case DFS will be preferable. 
 
 \subsubsection*{Meet in the Middle}
 
