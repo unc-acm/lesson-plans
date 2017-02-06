@@ -21,19 +21,13 @@ public class Nation {
 	    int n = s.nextInt();
 	    int m = s.nextInt();
 	    int k = s.nextInt();
-	    
-	    ArrayList<Integer>[] graph =  new ArrayList[n];
-	    ArrayList <Integer> govs = new ArrayList<Integer>();
-	    ArrayList <Boolean> visited = new ArrayList<Boolean>(n);
-	    
-	    for(int i = 0; i < n; i++)
-    	{
-	    	graph[i] = new ArrayList<Integer>();
-	    	visited.add(false);
-    	}
+
+	    int[][] graph = new int[n][n];
+	    int[] govs = new int[k];
+	    boolean[] visited = new boolean[n];
 	    
 	    for (int i = 0 ; i < k ; i++) {
-	        govs.add(s.nextInt() - 1);
+	        govs[i] = s.nextInt() - 1;
 	    }
 	    
 	    

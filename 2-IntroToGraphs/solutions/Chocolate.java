@@ -2,12 +2,13 @@ import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class Chocolate {
     static class Step {
-        private long minute;
-        private long a, b;
+        public long minute;
+        public long a, b;
         public Step(long minute, long a, long b)
         {
             this.minute = minute;
@@ -23,8 +24,8 @@ public class Chocolate {
 
     public static void main(String[] args) {
 
-        TreeMap<Long, Step> ASteps = new TreeMap<Long, Step>();
-        TreeMap<Long, Step> BSteps = new TreeMap<Long, Step>();
+        Map<Long, Step> ASteps = new TreeMap<Long, Step>();
+        Map<Long, Step> BSteps = new TreeMap<Long, Step>();
 
         Queue<Step> AQueue = new ArrayDeque<Step>();
         Queue<Step> BQueue = new ArrayDeque<Step>();
