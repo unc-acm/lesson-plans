@@ -90,14 +90,16 @@ edge $(v, u)$ with $v \in V$ and $u \in U$ with the minimum edge weight. Add the
 edge to the MST, and move $u$ form $U$ to $V$. In psudocode, it is:
 \begin{verbatim}
 Prim(Graph G):
-    V <- v_0                            // arbitrary starting point
-    U = G \ V
-    MST = {}                            // initialize to empty set
-    while V != G.V:                     // while not all vertices are in V
-        e = (u, v) with minimum edge weight where u in U and v in V
+    boolean visited[V] initialized to false
+    visited[v_0] = true                 // for arbitrary v_0
+    MST = {}
+
+    while not all visited:
+        e = (v, u) with minimum edge weight
+            where visited[v] = true and visited[u] = false
         MST.add(e)
-        U.remove(u)
-        V.add(u)
+        visited[u] = true
+
     return MST
 \end{verbatim}
 
@@ -111,7 +113,23 @@ Kruskal's algorithm is the opposite of Prim's. Instead of building a tree
 spawning from one vertex. It builds a forest that eventually becomes one single
 spanning tree. This algorithm is greedy in nature as well. We began by picking
 the shortest edge, adding that to the MST, then we combine the two trees at the
-endpoints of the edge.
+endpoints of the edge. In psudocode it is:
+\begin{verbatim}
+Kruskal(Graph G):
+    MST = {}
+    set trees[V] initialized to {v} for each v in V
+
+    for e = (u, v) in G.E ordered by weight increasingly:
+        if trees[u] =/= trees[v]:
+            MST.add(e)
+            trees[u] = trees[v] = UNION(trees[u], trees[v])
+
+    return MST
+\end{verbatim}
+
+Note that the runtime of this is exactly like the runtime of Prim $O(E \log(V))$
+because we literally go through each edge and the unions of sets can be done in
+$O(\log(N))$ time where $N$ is the size of the larger set.
 
 \subsection*{Shortest Path -- Dijkstra}
 
@@ -130,6 +148,36 @@ node. If the tentative distance is smaller than the distance currently
 associated with the neighbor, we will update the distance to the smaller value.
 We will then mark the current node as visited and move to the neighbor with the
 lowest associated distance.
+
+This algorithm is a bit more complex than the others when written in psudocode
+but here is what it should look like:
+\begin{verbatim}
+Dijkstra(Graph G, Vertex src, Vertex dest):
+    boolean visited[V] initialized to false
+    int dist[V] initialized to infinity
+    priorityQueue frontier sorted by dist, with min on top
+
+    dist[src] = 0
+    frontiner.push(src)
+
+    while (!frontier.empty()):
+        v = frontier.pop()
+        
+        if visited[v]:
+            continue; // already been here, skip!
+
+        if v == dest:
+            return dist[dest]
+
+        for (v, u) in G.E with weight w:
+            if dist[u] > dist[v] + w:
+                dist[u] = dist[v] + w
+                frontier.push(u)
+
+        visited[v] = true
+
+    return dist[dest]
+\end{verbatim}
 
 The algorithm terminates when the node we are looking for has been visited, or
 when the entire graph has been traversed. The algorithm has the worst-case
@@ -155,9 +203,9 @@ for v from 1...V:
 for (u, v) in E with weight w:
     dist[u][v] = w
 
-for i from 1...V:
+for k from 1...V:
     for j from 1...V:
-        for k from 1...V:
+        for i from 1...V:
             if dist[i][j] > dist[i][k] + dist[k][j]
                 dist[i][j] = dist[i][k] + dist[k][j]
 \end{verbatim}
