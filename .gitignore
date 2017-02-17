@@ -183,3 +183,7 @@ TSWLatexianTemp*
 .*.un~
 
 *.class
+
+# self test files
+*.in
+*.out
