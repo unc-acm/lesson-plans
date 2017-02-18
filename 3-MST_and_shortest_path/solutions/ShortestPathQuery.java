@@ -63,7 +63,7 @@ public class ShortestPathQuery {
         }
 
         inputs = br.readLine().split(" ");
-        int s = Integer.parseInt(inputs[0]) - 1; //sc.nextInt() - 1;
+        int s = Integer.parseInt(inputs[0]); //sc.nextInt() - 1;
         int q = Integer.parseInt(inputs[1]); //sc.nextInt();
 
         // map of query -> dist
@@ -99,8 +99,14 @@ public class ShortestPathQuery {
         
         int solved = 0;
 
-        while (solved < q) { 
-            int v = frontier.poll().e.to;
+        while (solved < q) {
+            if (frontier.isEmpty()) {
+                break;
+            }
+
+            Edge current = frontier.poll().e;
+            int v = current.to;
+            int c = current.color;
 
             if (visited[v]) {
                 continue;
@@ -116,10 +122,18 @@ public class ShortestPathQuery {
             for (int i = 0 ; i < graph.get(v).size() ; i++) {
                 Edge e = graph.get(v).get(i);
                 int neighbor = e.to;
+                int color = e.color;
+                int weight = e.weight;
 
                 if (visited[neighbor]) {
                     continue;
                 }
+
+                if (color == c) {
+                    continue;
+                }
+
+                if (distTo[neighbor][0] < )
 
                 int currentCost = (colorNode[v][0] != e.color) ? distTo[v][0] : distTo[v][1];
 
