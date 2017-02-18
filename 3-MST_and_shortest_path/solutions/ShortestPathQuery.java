@@ -37,12 +37,14 @@ public class ShortestPathQuery {
     }
 
     // Functions
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        // Scanner sc = new Scanner(System.in);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] inputs = br.readLine().split(" ");
 
-        int n = sc.nextInt();
-        int m = sc.nextInt();
-        int C = sc.nextInt();
+        int n = Integer.parseInt(inputs[0]); //sc.nextInt();
+        int m = Integer.parseInt(inputs[1]); //sc.nextInt();
+        //int C = Integer.parseInt(inputs[2]) //sc.nextInt();
 
         List<List<Edge>> graph = new ArrayList<List<Edge>>();
 
@@ -51,23 +53,25 @@ public class ShortestPathQuery {
         }
 
         for (int i = 0 ; i < m ; i++) {
-            int u = sc.nextInt() - 1;
-            int v = sc.nextInt() - 1;
-            int w = sc.nextInt();
-            int c = sc.nextInt();
+            inputs = br.readLine().split(" ");
+            int u = Integer.parseInt(inputs[0]) - 1; //sc.nextInt() - 1;
+            int v = Integer.parseInt(inputs[1]) - 1; //sc.nextInt() - 1;
+            int w = Integer.parseInt(inputs[2]); //sc.nextInt();
+            int c = Integer.parseInt(inputs[3]); //sc.nextInt();
 
             graph.get(u).add(new Edge(v, w, c));
         }
 
-        int s = sc.nextInt() - 1;
-        int q = sc.nextInt();
+        inputs = br.readLine().split(" ");
+        int s = Integer.parseInt(inputs[0]) - 1; //sc.nextInt() - 1;
+        int q = Integer.parseInt(inputs[1]); //sc.nextInt();
 
         // map of query -> dist
         HashMap<Integer, Integer> solutions = new HashMap<Integer, Integer>();
         int[] queries = new int[q];
 
         for (int i = 0 ; i < q ; i++) {
-            int t = sc.nextInt() - 1;
+            int t = Integer.parseInt(br.readLine()) - 1;
             queries[i] = t;
             solutions.put(t, -1);
         }
@@ -95,11 +99,7 @@ public class ShortestPathQuery {
         
         int solved = 0;
 
-        while (solved < q) {
-            if (frontier.isEmpty()) {
-                break;
-            }
-
+        while (solved < q) { 
             int v = frontier.poll().e.to;
 
             if (visited[v]) {
