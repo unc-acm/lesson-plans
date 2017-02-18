@@ -3,36 +3,35 @@ import java.io.*;
 
 public class ShortestPathQuery {
 
-    public static int INF = 1000000001; // 1e9 + 1
+    public static long INF = 10000000000000000L;
 
     static class Edge {
-        int to;
-        int weight, color;
+        int to, color;
+        long weight;
 
-        public Edge(int _t, int _w, int _c) {
+        public Edge(int _t, long _w, int _c) {
             to = _t;
             weight = _w;
             color = _c;
         }
     }
 
-    static class VertexComparison implements Comparable<VertexComparison> {
-        Edge e;
-        int[] dists;
+    // records effectively the path to v from s
+    // dist == recorded distance from s
+    // lastColor == edge leading into v
+    static class VertexComp implements Comparable<VertexComp> {
+        int v, lastColor;
+        long dist;
 
-        public VertexComparison(Edge _e, int[] _d) {
-            e = _e;
-            dists = _d;
+        public VertexComp(int _v, long _d, int _c) {
+            v = _v;
+            dist = _d;
+            lastColor = _c;
         }
 
         @Override
-        public int compareTo(VertexComparison o) {
-            if (Integer.compare(dists[0], o.dists[0]) != 0) {
-                return Integer.compare(dists[0], o.dists[0]);
-            }
-            else {
-                return Integer.compare(dists[1], o.dists[1]);
-            }
+        public int compareTo(VertexComp o) {
+            return Long.compare(dist, o.dist);
         }
     }
 
@@ -56,31 +55,29 @@ public class ShortestPathQuery {
             inputs = br.readLine().split(" ");
             int u = Integer.parseInt(inputs[0]) - 1; //sc.nextInt() - 1;
             int v = Integer.parseInt(inputs[1]) - 1; //sc.nextInt() - 1;
-            int w = Integer.parseInt(inputs[2]); //sc.nextInt();
+            long w = Integer.parseInt(inputs[2]); //sc.nextInt();
             int c = Integer.parseInt(inputs[3]); //sc.nextInt();
 
             graph.get(u).add(new Edge(v, w, c));
         }
 
         inputs = br.readLine().split(" ");
-        int s = Integer.parseInt(inputs[0]); //sc.nextInt() - 1;
-        int q = Integer.parseInt(inputs[1]); //sc.nextInt();
-
-        // map of query -> dist
-        HashMap<Integer, Integer> solutions = new HashMap<Integer, Integer>();
-        int[] queries = new int[q];
-
-        for (int i = 0 ; i < q ; i++) {
-            int t = Integer.parseInt(br.readLine()) - 1;
-            queries[i] = t;
-            solutions.put(t, -1);
-        }
+        int s = Integer.parseInt(inputs[0]) - 1; //sc.nextInt() - 1;
 
         boolean[] visited = new boolean[n];
 
-        // we keep 2 distances because of coloring issues
-        int[][] distTo = new int[n][2];
-        int[][] colorNode = new int[n][2];
+        // key realization: we need to keep two distances, distance of shortest
+        // path and another distance at EVERY NODE with a color different from
+        // that used in the shortest path. Both of which will be in the priority
+        // queue
+        //
+        // Explanation: this way, if the shortest path hits a dead end, nothing
+        // further will be pushed onto the priority queue, but the other color
+        // will continue the search. And since we do this for every vertex, if
+        // by the end it is unreachable, then no troyic path exists. Otherwise
+        // we are guaranteed the shortest troyic path.
+        long[][] distTo = new long[n][2];
+        int[][] incomingColor = new int[n][2];
 
         for (int i = 0 ; i < n ; i++) {
             if (i == s) {
@@ -90,76 +87,53 @@ public class ShortestPathQuery {
                 distTo[i][0] = distTo[i][1] = INF;
             }
 
-            colorNode[i][0] = colorNode[i][1] = -1;
+            incomingColor[i][0] = incomingColor[i][1] = -1;
         }
 
-        PriorityQueue<VertexComparison> frontier = new PriorityQueue<VertexComparison>();
-
-        frontier.offer(new VertexComparison(new Edge(s, 0, -1), new int[]{0, 0}));
+        PriorityQueue<VertexComp> frontier = new PriorityQueue<VertexComp>();
         
-        int solved = 0;
+        frontier.offer(new VertexComp(s, 0, -1));
+        
+        while (!frontier.isEmpty()) {
 
-        while (solved < q) {
-            if (frontier.isEmpty()) {
-                break;
-            }
-
-            Edge current = frontier.poll().e;
-            int v = current.to;
-            int c = current.color;
-
-            if (visited[v]) {
-                continue;
-            }
-
-            visited[v] = true;
-
-            if (solutions.get(v) != null) {
-                solutions.put(v, distTo[v][0]);
-                solved++;
-            }
+            VertexComp current = frontier.poll();
+            int v = current.v;
+            long d = current.dist;
+            int c = current.lastColor;
 
             for (int i = 0 ; i < graph.get(v).size() ; i++) {
                 Edge e = graph.get(v).get(i);
-                int neighbor = e.to;
-                int color = e.color;
-                int weight = e.weight;
 
-                if (visited[neighbor]) {
+                if (e.color == c) {
                     continue;
                 }
 
-                if (color == c) {
-                    continue;
+                if (d + e.weight < distTo[e.to][0]) {
+                    distTo[e.to][0] = d + e.weight;
+                    incomingColor[e.to][0] = e.color;
+                    frontier.offer(new VertexComp(e.to, distTo[e.to][0], incomingColor[e.to][0]));
                 }
 
-                if (distTo[neighbor][0] < )
-
-                int currentCost = (colorNode[v][0] != e.color) ? distTo[v][0] : distTo[v][1];
-
-                if (currentCost + e.weight < distTo[neighbor][0]) {
-                    distTo[neighbor][1] = distTo[neighbor][0];
-                    distTo[neighbor][0] = currentCost + e.weight;
-
-                    colorNode[neighbor][1] = colorNode[neighbor][0];
-                    colorNode[neighbor][0] = e.color;
+                // recall that the second path has to have a different incoming
+                // color than the first path
+                else if (incomingColor[e.to][0] != e.color && d + e.weight < distTo[e.to][1]) {
+                    distTo[e.to][1] = d + e.weight;
+                    incomingColor[e.to][1] = e.color;
+                    frontier.offer(new VertexComp(e.to, distTo[e.to][1], incomingColor[e.to][1]));
                 }
-
-                else if (currentCost + e.weight < distTo[neighbor][1]) {
-                    distTo[neighbor][1] = currentCost + e.weight;
-                    colorNode[neighbor][1] = e.color;
-                }
-
-                frontier.offer(new VertexComparison(e, distTo[neighbor]));
             }
+
         }
 
-        for (int query : queries) {
-            if (solutions.get(query) >= INF) {
+        int q = Integer.parseInt(inputs[1]); //sc.nextInt();
+
+        for (int i = 0 ; i < q ; i++) {
+            int t = Integer.parseInt(br.readLine()) - 1;
+            if (distTo[t][0] == INF) {
                 System.out.println(-1);
             }
             else {
-                System.out.println(solutions.get(query));
+                System.out.println(distTo[t][0]);
             }
         }
     }
