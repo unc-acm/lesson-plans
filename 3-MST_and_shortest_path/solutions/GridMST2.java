@@ -3,28 +3,18 @@ import java.io.*;
 
 public class GridMST2 {
 
-    static class BoardMarker {
-        int origin; // id of the point originated this makrer
-        int dist; // manhattan dist to home
+    static class QueueMember {
+        int x, y, id;
 
-        public BoardMarker(int _o, int _d) {
-            origin = _o;
-            dist = _d;
-        }
-    }
-
-    static class QueueMemeber {
-        int x, y;
-        BoardMarker content;
-
-        public QueueMemeber(int _x, int _y, int _o, int _d) {
+        public QueueMember(int _x, int _y, int _id) {
             x = _x;
             y = _y;
-            content = new BoardMarker(_o, _d);
+            id = _id;
         }
     }
-    public static int generateMST(BoardMarker[][] board,
-            Queue<QueueMemeber> bfsQueue,
+
+    public static int generateMST(int[][] board,
+            Queue<QueueMember> bfsQueue,
             ArrayList<HashSet<Integer>> forestLookup,
             int[][] points,
             int N, int max_x, int max_y) {
@@ -32,42 +22,41 @@ public class GridMST2 {
         int totalWeight = 0;
 
         while (!bfsQueue.isEmpty()) {
-            QueueMemeber current = bfsQueue.poll();
+            QueueMember current = bfsQueue.poll();
 
             int x = current.x; int y = current.y;
-            int id = current.content.origin;
-            int d = current.content.dist;
+            int id = current.id;
 
-            if (board[x][y].origin == id) {
+            if (board[x][y] == id) {
                 continue;
             }
 
-            if (board[x][y].origin == -1) {
-                board[x][y] = new BoardMarker(id, d);
+            if (board[x][y] == -1) {
+                board[x][y] = id;
 
                 if (x > 0) {
-                    bfsQueue.offer(new QueueMemeber(x - 1, y, id, d + 1));
+                    bfsQueue.offer(new QueueMember(x - 1, y, id));
                 }
 
                 if (x < max_x - 1) {
-                    bfsQueue.offer(new QueueMemeber(x + 1, y, id, d + 1));
+                    bfsQueue.offer(new QueueMember(x + 1, y, id));
                 }
 
                 if (y > 0) {
-                    bfsQueue.offer(new QueueMemeber(x, y - 1, id, d + 1));
+                    bfsQueue.offer(new QueueMember(x, y - 1, id));
                 }
 
                 if (y < max_y - 1) {
-                    bfsQueue.offer(new QueueMemeber(x, y + 1, id, d + 1));
+                    bfsQueue.offer(new QueueMember(x, y + 1, id));
                 }
             }
 
             else {
-                if (forestLookup.get(id).contains(board[x][y].origin)) {
+                if (forestLookup.get(id).contains(board[x][y])) {
                     continue;
                 }
 
-                int otherID = board[x][y].origin;
+                int otherID = board[x][y];
 
                 totalWeight += Math.abs(points[id][0] - points[otherID][0]);
                 totalWeight += Math.abs(points[id][1] - points[otherID][1]);
@@ -101,7 +90,7 @@ public class GridMST2 {
 
         ArrayList<HashSet<Integer>> forestLookup = new ArrayList<HashSet<Integer>>();
         //HashMap<Integer, HashSet<Integer>> forestLookup = new HashMap<Integer, HashSet<Integer>>();
-        Queue<QueueMemeber> bfsQueue = new LinkedList<QueueMemeber>();
+        Queue<QueueMember> bfsQueue = new LinkedList<QueueMember>();
 
         for (int i = 0 ; i < N ; i++) {
             int x = s.nextInt();
@@ -117,17 +106,17 @@ public class GridMST2 {
 
             forestLookup.add(tmp);
 
-            bfsQueue.offer(new QueueMemeber(x, y, i, 0));
+            bfsQueue.offer(new QueueMember(x, y, i));
         }
 
         max_x++;
         max_y++;
 
-        BoardMarker[][] board = new BoardMarker[max_x][max_y];
+        int[][] board = new int[max_x][max_y];
 
         for (int i = 0 ; i < max_x ; i++) {
             for (int j = 0 ; j < max_y ; j++) {
-                board[i][j] = new BoardMarker(-1, -1);
+                board[i][j] = -1;
             }
         }
 
