@@ -5,9 +5,9 @@ public class GridMST {
     /* SOLUTION!!!
      * 
      * This solution is a different one from the one that we went over in class.
-     * Partially because my implementation for the solution went over in class
-     * does not get accepted for some reason (I am working on a fix and will
-     * send that out once I get it to work).
+     * Partially because the solution went over in class ran into some
+     * unexpected complications. So instead we decided to send out a much
+     * simpler solution with Prims.
      *
      * this is basically the same idea except it uses Prim's instead of
      * Kruskals, this solution uses a 2D array of booleans to mark which points
