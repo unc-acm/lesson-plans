@@ -1,7 +1,24 @@
 import java.util.*;
 import java.io.*;
 
-public class GridMST3 {
+public class GridMST {
+    /* SOLUTION!!!
+     * 
+     * This solution is a different one from the one that we went over in class.
+     * Partially because my implementation for the solution went over in class
+     * does not get accepted for some reason (I am working on a fix and will
+     * send that out once I get it to work).
+     *
+     * this is basically the same idea except it uses Prim's instead of
+     * Kruskals, this solution uses a 2D array of booleans to mark which points
+     * have not yet been added to the MST. We start from an arbitrary point then
+     * use dijkstras to find the closest point that we are still interest in.
+     * Then we set dist at that new point to 0 and continue the search.
+     *
+     * this way dijkstras basically finds the global minimum edge between V and
+     * U and we add that to the MST. We return when the tree is spanning.
+     */
+    
     // Instance Variables
     static final int INF = 10000000;
     static int N;
