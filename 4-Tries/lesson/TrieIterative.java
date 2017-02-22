@@ -5,7 +5,8 @@ public class TrieIterative {
     // Instance Variables
     int[] wordCount;
     int[] prefixCount;
-    ArrayList<Map<Character, Integer>> edges;
+    int[][] edges; // this set of edges only handles lower case relatively small tries
+    // for more diverse cases consider using a map from (int, char) -> int
     int size;
     int maxSize;
 
@@ -17,9 +18,16 @@ public class TrieIterative {
         maxSize = _maxSize;
         wordCount = new int[maxSize];
         prefixCount = new int[maxSize];
-        for (int i = 0 ; i < maxSize ; i++) {
-            edges.add(new HashMap<Character, Integer>());
+        edges = new int[26][maxSize];
+        for (int i = 0 ; i < 26 ; i++) {
+            for (int j = 0 ; j < maxSize ; j++) {
+                edges[i][j] = -1;
+            }
         }
+    }
+
+    int getIndex(char c) {
+        return (c - 'a');
     }
 
     // Functions
@@ -33,12 +41,12 @@ public class TrieIterative {
         for (char c : s.toCharArray()) {
             prefixCount[currentNode]++;
 
-            if (edges.get(currentNode).get(c) == null) {
-                edges.get(currentNode).put(c, size);
+            if (edges[getIndex(c)][currentNode] == -1) {
+                edges[getIndex(c)][currentNode] = size;
                 size++;
             }
 
-            currentNode = edges.get(currentNode).get(c);
+            currentNode = edges[getIndex(c)][currentNode];
         }
 
         wordCount[currentNode]++;
@@ -48,11 +56,11 @@ public class TrieIterative {
         int currentNode = 0;
 
         for (char c : s.toCharArray()) {
-            if (edges.get(currentNode).get(c) == null) {
+            if (edges[getIndex(c)][currentNode] == -1) {
                 return false;
             }
 
-            currentNode = edges.get(currentNode).get(c);
+            currentNode = edges[getIndex(c)][currentNode];
         }
 
         return wordCount[currentNode] > 0;
@@ -62,11 +70,11 @@ public class TrieIterative {
         int currentNode = 0;
 
         for (char c : p.toCharArray()) {
-            if (edges.get(currentNode).get(c) == null) {
+            if (edges[getIndex(c)][currentNode] == -1) {
                 return 0;
             }
 
-            currentNode = edges.get(currentNode).get(c);
+            currentNode = edges[getIndex(c)][currentNode];
         }
 
         return prefixCount[currentNode];
