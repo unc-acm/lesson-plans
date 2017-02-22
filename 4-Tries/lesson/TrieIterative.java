@@ -49,6 +49,7 @@ public class TrieIterative {
             currentNode = edges[getIndex(c)][currentNode];
         }
 
+        prefixCount[currentNode]++;
         wordCount[currentNode]++;
     }
 
