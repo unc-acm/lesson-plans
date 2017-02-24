@@ -4,7 +4,6 @@ import java.io.*;
 public class XorSum {
     // Instance Variables
     static class XorTrie {
-        //byte[] nodes; // i'd prefer bit but... fk java
         int[][] edges;
         int size;
         int maxSize;
@@ -33,6 +32,11 @@ public class XorSum {
 
             for (int i = 30 ; i >= 0 ; i--) { // we skip the sign bit
                 int bit = ((n & (1 << i)) != 0) ? 1 : 0;
+                // explanation: (1 << i) --> leftshift 1 by i bits, creates a
+                // number where the ith bit is 1 and everything else is 0
+                // n binary and with that number gives you 0 if that bit is 0 or
+                // 2^i if that bit is 1, so we just check against 0 to see if
+                // that bit is 0 or 1
 
                 if (edges[currentNode][bit] == -1) { // edge dne
                     edges[currentNode][bit] = size;
@@ -56,7 +60,7 @@ public class XorSum {
                     currentNode = edges[currentNode][reverseBit];
                 }
                 else {
-                    currentNode = edges[currentNode][(reverseBit - 1) * (reverseBit - 1)];
+                    currentNode = edges[currentNode][(reverseBit - 1) * (reverseBit - 1)]; // math is magical
                 }
             }
 
