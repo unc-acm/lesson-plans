@@ -61,6 +61,7 @@ public class XorSum {
                 }
                 else {
                     currentNode = edges[currentNode][(reverseBit - 1) * (reverseBit - 1)]; // math is magical
+                    // (x - 1)^2 flips 0 and 1
                 }
             }
 
