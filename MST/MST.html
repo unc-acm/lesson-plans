@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html > 
+<head><title></title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- html --> 
+<meta name="src" content="MST.tex"> 
+<meta name="date" content="2017-02-01 14:16:00"> 
+<link rel="stylesheet" type="text/css" href="MST.css"> 
+</head><body 
+>
+<h3 class="likesectionHead"><a 
+ id="x1-1000"></a>Minimal Spanning Tree (Prim&#8217;s Algorithm)</h3>
+<!--l. 47--><p class="noindent" >
+<h4 class="likesubsectionHead"><a 
+ id="x1-2000"></a>Terms and Definitions</h4>
+<!--l. 49--><p class="noindent" ><span 
+class="cmbx-12">Minimal Spanning Tree (MST)</span>: A set of edges in a connected, undirected, edge-weighted
+graph that connects all the vertices without any cycles and with the lowest possible edge
+length.
+<!--l. 53--><p class="noindent" >
+<h4 class="likesubsectionHead"><a 
+ id="x1-3000"></a>Algorithm Outline</h4>
+<!--l. 55--><p class="noindent" >Given <span 
+class="cmmi-12">G </span>= (<span 
+class="cmmi-12">V,E</span>), we will keep track of which node has been visited by the following procedure,
+and start at an arbitrary vertex <span 
+class="cmmi-12">s</span>:
+                                                                                         
+                                                                                         
+<div class="verbatim" id="verbatim-1">
+while&#x00A0;not&#x00A0;all&#x00A0;vertices&#x00A0;has&#x00A0;been&#x00A0;visited:
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;mark&#x00A0;s&#x00A0;as&#x00A0;visited
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;u&#x00A0;=&#x00A0;s&#8217;s&#x00A0;closest&#x00A0;neighbor&#x00A0;that&#x00A0;has&#x00A0;not&#x00A0;been&#x00A0;visited<span class="footnote-mark"><a 
+href="MST2.html#fn1x0"><sup class="textsuperscript"><span 
+class="cmr-10x-x-109">1</span></sup></a></span><a 
+ id="x1-3001f1"></a> 
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;add&#x00A0;edge&#x00A0;connecting&#x00A0;s&#x00A0;and&#x00A0;u&#x00A0;to&#x00A0;the&#x00A0;MST
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;s&#x00A0;=&#x00A0;u
+</div>
+<!--l. 63--><p class="nopar" >
+<!--l. 65--><p class="noindent" >
+<h4 class="likesubsectionHead"><a 
+ id="x1-4000"></a>Algorithm Pre-Condition and Pitfalls</h4>
+<!--l. 66--><p class="noindent" >Note that this algorithm only works correctly for <span 
+class="cmbx-12">undirected graphs</span>. A different algorithm must
+be used for directed graphs.
+<!--l. 69--><p class="noindent" >Also note that this program does not terminate if the graph is not connected. A way to fix this is
+to slightly modify the algorithm to generate a <span 
+class="cmbx-12">Minimal Spanning Forest</span>, or a collection of
+MST&#8217;s. The modification is that if all of <span 
+class="cmmi-12">s</span>&#8217;s neighbors have been visited, let <span 
+class="cmmi-12">s </span>be a random vertex
+that has not been visited and continue the loop.
+<!--l. 75--><p class="noindent" >
+<h4 class="likesubsectionHead"><a 
+ id="x1-5000"></a>Performance</h4>
+<!--l. 77--><p class="noindent" >The algorithm is greedy in nature, and the runtime depends on implementation, the
+main difference is using a priority queue or linear search, and the runtime difference
+are:
+<div class="table">
+                                                                                         
+                                                                                         
+<!--l. 81--><p class="noindent" ><hr class="float"><div class="float" 
+>
+                                                                                         
+                                                                                         
+<div class="tabular"> <table id="TBL-1" class="tabular" 
+cellspacing="0" cellpadding="0" rules="groups" 
+><colgroup id="TBL-1-1g"><col 
+id="TBL-1-1"></colgroup><colgroup id="TBL-1-2g"><col 
+id="TBL-1-2"></colgroup><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-1"  
+class="td11">Priority Queue</td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-2"  
+class="td11"><span 
+class="cmmi-12">O</span>(<span 
+class="cmsy-10x-x-120">|</span><span 
+class="cmmi-12">E</span><span 
+class="cmsy-10x-x-120">|</span> log <span 
+class="cmsy-10x-x-120">|</span><span 
+class="cmmi-12">V </span><span 
+class="cmsy-10x-x-120">|</span>)</td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-2-1"  
+class="td11"> Linear Search </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-2-2"  
+class="td11">  <span 
+class="cmmi-12">O</span>(<span 
+class="cmsy-10x-x-120">|</span><span 
+class="cmmi-12">V </span><span 
+class="cmsy-10x-x-120">|</span><sup><span 
+class="cmr-8">2</span></sup>)    </td>
+</tr><tr 
+class="hline"><td><hr></td><td><hr></td></tr><tr  
+ style="vertical-align:baseline;" id="TBL-1-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-3-1"  
+class="td11">             </td></tr></table></div>
+                                                                                         
+                                                                                         
+</div><hr class="endfloat" />
+</div>
+<!--l. 90--><p class="noindent" >Due to the cost of building a priority queue, it is generally preferred to just use a linear search for
+dense graphs (where <span 
+class="cmsy-10x-x-120">|</span><span 
+class="cmmi-12">E</span><span 
+class="cmsy-10x-x-120">|&asymp;|</span><span 
+class="cmmi-12">V </span><span 
+class="cmsy-10x-x-120">|</span><sup><span 
+class="cmr-8">2</span></sup>), but the priority queue implementation is generally preferred for
+sparse graphs.
+<h4 class="likesubsectionHead"><a 
+ id="x1-6000"></a>Sample Problems</h4>
+<!--l. 95--><p class="noindent" >https://uva.onlinejudge.org/external/100/10034.pdf  
+</body></html> 
+
+                                                                                         
+
+
